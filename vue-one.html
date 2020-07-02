@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div class="box">
+        {{name}}
+        <!-- 差值表达式可以写的类型； array  string  number  boolean  object
+        {{ ['好看','喜欢'] }}
+        {{ '第一次写vue' }}
+        {{123456}}
+        {{'error string'}}
+        {{ [1,2,333] }}
+        {{ '汉字文字显示' }}
+        {{ true }}
+        {{ {name:'姓名',age:'333'} }} -->
+
+        <!-- 差值中的表达式，还可以参与运算；
+        {{ 2*8 }}
+        {{ 8%3 }}
+        {{ 8 / 2 }}
+        {{ 2>3 ? 4 : 8 }}       
+        {{ 'us ' + 'love ' + 'you' }}
+        {{ 0 || '显示' }}
+        {{ '显示' && 0 }}
+        {{ !'显示' }} -->
+
+        {{list.name}}
+        {{ list.age }}
+        <p>
+            {{p}}
+        </p>
+
+    </div>
+        删除行：   Ctrl + shift + k;
+        运行：  alt + B  默认浏览器运行；
+                Alt + shift + B  其它浏览器运行；
+        
+    <div>
+
+    </div>
+    <script>
+       const vm = new Vue({
+        //    el:'.box',
+           data:{
+               name:'tutu vue page',
+               p:'once p list',
+               list:{
+                   name:'listName',
+                   age:44
+               }
+           }
+       });
+        
+       vm.$mount('.box')
+
+       vm.list.age = '22';
+       vm.name = '重新渲染内容';
+    //    console.log(vm.name)
+    //    console.log(vm.$el.innerText)
+
+    //    vm.$nextTick(()=>{
+    //        console.log('the page has been refreshed')
+    //    })
+
+    //    Vue.nextTick(()=>{
+    //        console.log('from Vue,this page has been refreshed')
+    //    })
+
+
+       setTimeout(function(){
+            console.log('宏任务')
+        },0)
+        Promise.resolve().then(()=>{
+            console.log('微任务')
+        })
+
+    </script>
+</body>
+</html>
