@@ -5,27 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> </title>
     <script src="./vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
     <link rel="stylesheet" href="css.css">
-    <script src="./jquery-3.0.0.min.js"></script>
 </head>
 <body>
-    <p>
-        侦听器；
-        响应数据的变化，当数据变化时，会立刻执行对应函数。
-    </p>
 <div class="box">
-    <div>
-        <input 
-            type="text"
-            v-model ='inputVal'
-        ><button>百度一下</button>
-    </div>
-    
-    <ul>
-       <li v-for='search in searchResList'>
-        {{ search }}
-       </li>
-    </ul>
+   <div>
+       <input type="text" v-model='valname'>
+       <input type="text" v-model='valPassWord'>
+       <button @click = 'valSubmit' >上传</button>
+       <button @click ='testJsonp'>测试jsonp</button>
+       <button @click='handleShow'>显示人物信息</button>
+       <ul v-if = 'valArr.length'>
+           <li v-for='val in valArr'>
+               <span> {{ val.name }} </span>
+               <span :style='{color:"#ececec"}'>|</span>
+               <span> {{ val.mail }} </span>
+           </li>
+       </ul>
+   </div>
 </div>
 
 <script>
@@ -33,77 +31,67 @@
 const vm = new Vue({
     el:'.box',
     data:{
-        inputVal: '',
-        searchResList:[]
+        valname:'',
+        valPassWord:'',
+        msg:'',
+        valArr:[]
     },
     methods:{
-        getData(val){
-            this.searchResList = val.s
+        
+        valSubmit(){
+            // if(! this.valname && this.valPassWord){
+            //     alert('没有name或email值')
+            //     return;
+            // }
+            // let obj = {};
+            // obj[0] = this.valname;
+            // obj[1] = this.valPassWord;
+            // this.valArr.push(obj)
+            this.$http.post(
+                'https://developer.duyiedu.com/vue/setUserInfo',
+                {
+                    name:this.valname,
+                    mail:this.valSubmit
+                }
+               
+            ).then(res =>{
+                this.msg = res.body.msg;
+            }).catch(error =>{
+                this.msg = error.body.msg
+            })
+            this.valname = '';
+            this.valPassWord = '';
+        },
+        handleShow(){
+            this.$http.get('https://developer.duyiedu.com/vue/getUserInfo')
+                .then(res => {
+                    this.valArr = res.body.data 
+                })
+        },
+        testJsonp(){
+            this.$http.jsonp('url').then(res => { })   //直接获取返回值；
+            this.$http.jsonp('url',{
+                params:{
+                    wd:'后台接收对象的函数'
+                }，
+                jsonp:'cb' // cd:'前端需写的callback函数'
+                })
+                .then(res =>{ 
+                    //res 为返回值；
+                })
         }
     },
     watch:{
-        inputVal(){
-            $.ajax({
-                url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
-                data:{
-                    wd:this.inputVal,
-                    cb:'vm.getData'
-                },
-                dataType:'jsonp'
-            })
+        msg(){
+            if(this.msg === ''){
+                return
+            }
+            alert(this.msg) ;
+            this.msg = ''
         }
     }
 })
 
-
-// const vm = new Vue({
-//     el:'.box',
-//     data:{
-//         inputVal:'',
-//         searchResList:[]
-//     },
-//     methods:{
-//         getData(val){
-//             this.searchResList = val.s
-           
-//         }
-       
-//     },
-//    watch:{
-//         inputVal(val){
-//             $.ajax({
-//                 data:{
-//                     wd:this.inputVal,
-//                     cb:'vm.getData'
-//                 },
-//                 url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
-//                 dataType:'jsonp'
-               
-//             })
-//         }
-//    }
-// })
-
-
-// const vm = new Vue({
-//    el:'.box',
-//    data:{
-//        msg:'name'
-//    },
-//    methods:{
-//         msg1Vale(){
-//             console.log('当监听结果类型为string 时，一般写函数名')
-//         }
-//    },
-//    watch:{
-//        msg:function(newVal,oldVal){
-//             // 当msg值发生变化是，执行此 回调函数。
-//             // newVal 是 msg最新值。 oldVal 是 msg 之前的值。
-//             msg 的值，类型可以是 函数, '' , []
-//        },
-//        msg1:'msg1Vale'
-//    }
-// })
 
 
 
