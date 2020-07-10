@@ -3,103 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>one remote use git </title>
+    <title> </title>
     <script src="./vue.js"></script>
+    <link rel="stylesheet" href="css.css">
+    <script src="./jquery-3.0.0.min.js"></script>
 </head>
 <body>
-    <!-- git clone ssh地址；
-    git init  初始化
+    <p>
+        侦听器；
+        响应数据的变化，当数据变化时，会立刻执行对应函数。
+    </p>
+<div class="box">
     <div>
-        git remote index.html     文件保存到暂存区。
-
-        git commit -m 'learn git once'
-        -m  意思是：文件；
-
+        <input 
+            type="text"
+            v-model ='inputVal'
+        ><button>百度一下</button>
     </div>
-    <div>
-        second addition
-        git: 
-            git add . (.指，所以文件，要把所有文件存入暂存区)
-    </div>
+    
+    <ul>
+       <li v-for='search in searchResList'>
+        {{ search }}
+       </li>
+    </ul>
+</div>
 
-    <div>
-        vue:
-        创建：
-        const vm = new Vue({
-            el:'.box',
-            data:{
-                name:'once page'
-            }
-        })
+<script>
 
-        vm.$mount('.box')
-
-        在page内写 差值表达式，可写： Array , string ,number, boolean , object, +-*/%, || && ! 
-        三目运算。表达式。
-
-        数据改变，改变已经存在的数据，可使页面刷新。
-        数据更改后，不会立即进行页面刷新。    vm.$el.innerText() 
-        页面刷新后，会立即执行  vm.$nextTick(()=>{})     Vue.nextTick(()=>{ })
-
-
-        区别： vm.$nextTick(function(){  内部this指向 vm实例  })
-               Vue.nextTick(function(){ this指向，window  })
-               两个都可以作为Promise  使用：
-                        vm.$nextTick().then(()=>{ ... })
-                        Vue.nextTick().then(()=>{  ... })
-
-        v-pre
-        v-once
-        v-cloak
-
-        v-bind;
-        v-text
-        v-html
-        v-show
-        v-if
-        v-else-if
-        v-else
-        标签template
-        特性：
-        ：class=''
-        : style=""
+const vm = new Vue({
+    el:'.box',
+    data:{
+        inputVal: '',
+        searchResList:[]
+    },
+    methods:{
+        getData(val){
+            this.searchResList = val.s
+        }
+    },
+    watch:{
+        inputVal(){
+            $.ajax({
+                url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+                data:{
+                    wd:this.inputVal,
+                    cb:'vm.getData'
+                },
+                dataType:'jsonp'
+            })
+        }
+    }
+})
 
 
-
-    </div> -->
-
-    <div class="box">
-        <!-- <button v-on:click="num += 1"> 点击+1 </button> -->
-        <!-- <button v-on:click="addNum"> 点击+1 </button> -->
-        <!-- <button v-on:click="addNum(4)"> 点击+1 </button> -->
-        <!-- <button v-on:click="addNum"> 点击+1 </button> -->
-        <!-- <button v-on:click="addNum(5,$event)"> 点击+1 </button> -->
-        <button @click="addNum(5,$event)"> 点击+1 </button>
-
-
-        <p class="p"> {{ num }} </p>
-    </div>
-
-    <script>
-        const vm = new Vue({
-            el:'.box',
-            data:{
-                num:0
-            },
-            methods:{
-                // addNum(e){
-                //     console.log(e.target)
-                // },
-                    addNum(num,e){
-                        this.num += num;
-                        console.log(e.target)
-                    }
-            }
-        })
-
-    //    vm.$nextTick(fn)
+// const vm = new Vue({
+//     el:'.box',
+//     data:{
+//         inputVal:'',
+//         searchResList:[]
+//     },
+//     methods:{
+//         getData(val){
+//             this.searchResList = val.s
+           
+//         }
+       
+//     },
+//    watch:{
+//         inputVal(val){
+//             $.ajax({
+//                 data:{
+//                     wd:this.inputVal,
+//                     cb:'vm.getData'
+//                 },
+//                 url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+//                 dataType:'jsonp'
+               
+//             })
+//         }
+//    }
+// })
 
 
-    </script>
+// const vm = new Vue({
+//    el:'.box',
+//    data:{
+//        msg:'name'
+//    },
+//    methods:{
+//         msg1Vale(){
+//             console.log('当监听结果类型为string 时，一般写函数名')
+//         }
+//    },
+//    watch:{
+//        msg:function(newVal,oldVal){
+//             // 当msg值发生变化是，执行此 回调函数。
+//             // newVal 是 msg最新值。 oldVal 是 msg 之前的值。
+//             msg 的值，类型可以是 函数, '' , []
+//        },
+//        msg1:'msg1Vale'
+//    }
+// })
+
+
+
+
+</script>
 </body>
 </html>
