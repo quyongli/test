@@ -52,7 +52,7 @@ const box = new Vue({
            if(contentLength === this.contentCount){return; }
            if(toBottomHeight < 600 && !this.flag){
                 this.flag = true;
-                axios.get('https://developer.duyiedu.com/vue/bz/video',{
+                axios.get('video',{
                     params:{
                         start:this.contentList.length,
                         offset:this.contentOffset
@@ -79,22 +79,25 @@ const box = new Vue({
     },
     created(){
         
-        axios.get('https://developer.duyiedu.com/vue/bz/nav')
+        axios.get('nav')
         .then(res=>{
-            if(res.status === 200 ){
-                this.navList = res.data.data
-            }
-               
+            // if(res.status === 200 ){
+            //     this.navList = res.data.data
+            // }
+            this.navList = res
         })
 
-        axios.get('https://developer.duyiedu.com/vue/bz/banner')
+        axios.get('banner')
         .then(res =>{
-            if(res.data.code === 200){
-                const one = {...res.data.data[0]};
-                one.id = Math.floor(Math.random() * 10000000);
-                this.bannerList = [...res.data.data,one]
-            }
-            // console.log(this.bannerList);
+            
+            // if(res.data.code === 200){
+            //     const one = {...res.data.data[0]};
+            //     one.id = Math.floor(Math.random() * 10000000);
+            //     this.bannerList = [...res.data.data,one]
+            // }
+            const one = {...res[0]};
+            one.id = Math.floor(Math.random() * 10000000);
+            this.bannerList = [...res,one]
             
         })
         
@@ -104,11 +107,13 @@ const box = new Vue({
                 offset:this.contentOffset
             }
         }).then((res)=>{
-            if(res.status === 200){
-                this.contentList = res.data.data;
-                this.contentCount = res.data.count
-            }
-            console.log(this.contentList)
+            // if(res.status === 200){
+            //     this.contentList = res.data.data;
+            //     this.contentCount = res.data.count
+            // }
+            // console.log(res)
+            this.contentList = res.data;
+            this.contentCount = res.count
         })
     },
     mounted(){

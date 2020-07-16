@@ -6,96 +6,53 @@
     <title> </title>
     <script src="./vue.js"></script>
     <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
-    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="./css.css">
+    
 </head>
 <body>
-<div class="box">
-   <div>
-       <input type="text" v-model='valname'>
-       <input type="text" v-model='valPassWord'>
-       <button @click = 'valSubmit' >上传</button>
-       <button @click ='testJsonp'>测试jsonp</button>
-       <button @click='handleShow'>显示人物信息</button>
-       <ul v-if = 'valArr.length'>
-           <li v-for='val in valArr'>
-               <span> {{ val.name }} </span>
-               <span :style='{color:"#ececec"}'>|</span>
-               <span> {{ val.mail }} </span>
-           </li>
-       </ul>
-   </div>
-</div>
-
-<script>
-
-const vm = new Vue({
-    el:'.box',
-    data:{
-        valname:'',
-        valPassWord:'',
-        msg:'',
-        valArr:[]
-    },
-    methods:{
+<div>
+    <div class="headNav">
+        <div class="head">
+            <img src="./image/logo.png" alt="">
+            <input type="text" :placeholder='inputVal'>
+            <button>下载 App</button>
+        </div>
+        <div class="nav" :class = 'navClass'>
+            <ul>
+                <li v-for='navName in navList'>
+                    <a href="#"> {{ navName.title }} </a>
+                </li>
+            </ul>
+            <div class="navBtn" @click='changeNav()'>
+               {{ imgIcon }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="banner">
+        <div>
+            <ul>
+                <li v-for='img in bannerImg'>
+                    <img :src="img.poster" :alt="img.title">
+                </li>
+            </ul>
+        </div>
         
-        valSubmit(){
-            // if(! this.valname && this.valPassWord){
-            //     alert('没有name或email值')
-            //     return;
-            // }
-            // let obj = {};
-            // obj[0] = this.valname;
-            // obj[1] = this.valPassWord;
-            // this.valArr.push(obj)
-            this.$http.post(
-                'https://developer.duyiedu.com/vue/setUserInfo',
-                {
-                    name:this.valname,
-                    mail:this.valSubmit
-                }
-               
-            ).then(res =>{
-                this.msg = res.body.msg;
-            }).catch(error =>{
-                this.msg = error.body.msg
-            })
-            this.valname = '';
-            this.valPassWord = '';
-        },
-        handleShow(){
-            this.$http.get('https://developer.duyiedu.com/vue/getUserInfo')
-                .then(res => {
-                    this.valArr = res.body.data 
-                })
-        },
-        testJsonp(){
-            this.$http.jsonp('url').then(res => { })   //直接获取返回值；
-            this.$http.jsonp('url',{
-                params:{
-                    wd:'后台接收对象的函数'
-                }，
-                jsonp:'cb' // cd:'前端需写的callback函数'
-                })
-                .then(res =>{ 
-                    //res 为返回值；
-                })
-        }
-    },
-    watch:{
-        msg(){
-            if(this.msg === ''){
-                return
-            }
-            alert(this.msg) ;
-            this.msg = ''
-        }
-    }
-})
-
-
-
-
-
-</script>
+    </div>
+    <div class="content">
+        <ul>
+            <li v-for='img in imgList' :key = 'img.id'>
+                <img :src="img.poster" alt="">
+                <p> {{ img.title }} </p>
+            </li>
+            <!-- <li>
+                <img src="" alt="">
+                <p></p>
+            </li> -->
+        </ul>
+    </div>
+    <div class="footer"></div>
+</div>
+<script src="./js.js"></script>
 </body>
 </html>
