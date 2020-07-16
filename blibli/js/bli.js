@@ -78,43 +78,50 @@ const box = new Vue({
         }
     },
     created(){
-        
-        axios.get('nav')
-        .then(res=>{
-            // if(res.status === 200 ){
-            //     this.navList = res.data.data
-            // }
-            this.navList = res
-        })
+        axios.all([
+            axios.get('nav'),
+            axios.get('banner'),
+            axios.get('video',{
+                params:{
+                    start:this.contentStart,
+                    offset:this.contentOffset
+                }
+            })
+        ]).then(axios.spread((nav,banner,video)=>{
+            this.navList = nav;
 
-        axios.get('banner')
-        .then(res =>{
-            
-            // if(res.data.code === 200){
-            //     const one = {...res.data.data[0]};
-            //     one.id = Math.floor(Math.random() * 10000000);
-            //     this.bannerList = [...res.data.data,one]
-            // }
-            const one = {...res[0]};
+            const one = {...banner[0]};
             one.id = Math.floor(Math.random() * 10000000);
-            this.bannerList = [...res,one]
+            this.bannerList = [...banner,one];
+          
+            this.contentList = video.data;
+            this.contentCount = video.count
+
+        }))
+
+
+        // axios.get('nav')
+        // .then(res=>{
+        //     this.navList = res
+        // })
+
+        // axios.get('banner')
+        // .then(res =>{
+        //     const one = {...res[0]};
+        //     one.id = Math.floor(Math.random() * 10000000);
+        //     this.bannerList = [...res,one]
             
-        })
+        // })
         
-        axios.get('https://developer.duyiedu.com/vue/bz/video',{
-            params:{
-                start:this.contentStart,
-                offset:this.contentOffset
-            }
-        }).then((res)=>{
-            // if(res.status === 200){
-            //     this.contentList = res.data.data;
-            //     this.contentCount = res.data.count
-            // }
-            // console.log(res)
-            this.contentList = res.data;
-            this.contentCount = res.count
-        })
+        // axios.get('https://developer.duyiedu.com/vue/bz/video',{
+        //     params:{
+        //         start:this.contentStart,
+        //         offset:this.contentOffset
+        //     }
+        // }).then((res)=>{
+        //     this.contentList = res.data;
+        //     this.contentCount = res.count
+        // })
     },
     mounted(){
         this.autoMove()
