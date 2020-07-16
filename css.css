@@ -8,34 +8,44 @@ html,body{
 }
 li{
     list-style: none;
-    line-height: 24px;
+    line-height: 34px;
 }
 ul{
     margin-top: 10px;
 }
 .box{
     width:800px;
-    margin:200px auto 0;
+    margin:20px auto;
     font-size: 16px;
 }
-.box input{
+.box>div{
     width:400px;
-    height:46px;
-    padding:10px 20px;
-    border:2px solid cornflowerblue;
-    border-radius: 10px 0 0 10px;
-    vertical-align:middle;
-    font-size: 18px;
-    box-sizing: border-box;
+    margin:0 auto;
 }
-.box button{
-    width:100px;
-    height:46px;
-    background-color: cornflowerblue;
-    /* border:2px solid cornflowerblue; */
+input,button,ul,li{
+    width:100%;
+}
+input{
+    height:40px;
+    border:1px solid #ececec;
+    margin-bottom: 20px;
+    padding:0 10px;
+}
+button{
+    height:40px;
     border:none;
-    border-radius: 0 10px 10px 0;
-    vertical-align:middle;
     color:white;
-    font-size: 18px;
+    background-color: slateblue;
+    margin-bottom: 20px;
+}
+ul{
+    border:1px solid #ececec;
+
+}
+li{
+    border-bottom: 1px solid #ececec;
+    padding:0 10px;
+}
+li span{
+    margin-right: 10px;
 }
