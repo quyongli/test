@@ -5,54 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> </title>
     <script src="./vue.js"></script>
-    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
-    <link rel="stylesheet" href="./css.css">
-    
+    <script src="./axios.js"></script>
+    <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-<div>
-    <div class="headNav">
-        <div class="head">
-            <img src="./image/logo.png" alt="">
-            <input type="text" :placeholder='inputVal'>
-            <button>下载 App</button>
+
+
+
+
+    
+<!-- <div class="box"> -->
+    <!-- <video-list 
+    v-for = 'video in videoList'
+    :img-src = 'video.poster'
+    :play = 'video.play'
+    :rank = 'video.rank'
+    :title = 'video.title'
+    ></video-list> -->
+    <!-- <video-box :video-list = 'videoList'></video-box>
+</div> -->
+
+<div class="box">
+   <!-- <video-item
+    v-for='video in videoList'
+    :poster = 'video.poster'
+    :play = 'video.play'
+    :rank = 'video.rank'
+    :title = 'video.title'
+   ></video-item> -->
+
+    <!-- <video-list :video-list = 'videoList'></video-list> -->
+<video-list
+    :video-list = 'videoList'
+></video-list>
+</div>
+
+<script>
+
+Vue.component('video-list',{
+    props:['videoList'],
+    template:`
+        <div>
+            <video-item
+                v-for="video in videoList"
+                v-bind = 'video'
+            ></video-item>
         </div>
-        <div class="nav" :class = 'navClass'>
-            <ul>
-                <li v-for='navName in navList'>
-                    <a href="#"> {{ navName.title }} </a>
-                </li>
-            </ul>
-            <div class="navBtn" @click='changeNav()'>
-               {{ imgIcon }}
+    `
+})
+
+
+// Vue.component('video-list',{
+//     props:['videoList'],
+//     template:`
+//     <div>
+//         <video-item 
+//          v-for="video in videoList"
+//          v-bind='video'
+//         />
+//     </div>
+//     `
+// })
+
+Vue.component('video-item',{
+    props:['poster','play','rank','title'],
+    template:`
+    <div class="video-item">
+        <div class="poster">
+            <img :src="poster" alt="">
+            <div class="info">
+                <div class="play"> {{ play }} </div>
+                <div class="rank"> {{ rank }} </div>
+                
             </div>
         </div>
+        <div class="title"> {{ title }} </div>
     </div>
-    
-    <div class="banner">
-        <div>
-            <ul>
-                <li v-for='img in bannerImg'>
-                    <img :src="img.poster" :alt="img.title">
-                </li>
-            </ul>
-        </div>
-        
-    </div>
-    <div class="content">
-        <ul>
-            <li v-for='img in imgList' :key = 'img.id'>
-                <img :src="img.poster" alt="">
-                <p> {{ img.title }} </p>
-            </li>
-            <!-- <li>
-                <img src="" alt="">
-                <p></p>
-            </li> -->
-        </ul>
-    </div>
-    <div class="footer"></div>
-</div>
-<script src="./js.js"></script>
+    `
+})
+
+
+const vm = new Vue({
+    el:'.box',
+    data:{
+        videoList:[]
+    },
+    created(){
+        axios.get('https://developer.duyiedu.com/vue/bz/video',{
+            params:{
+                start:0,
+                offset:20
+            }
+        }).then(res =>{
+            if(res.status === 200){
+                this.videoList = res.data.data;
+            }
+        })
+    }
+})
+
+
+
+
+// Vue.component('video-box',{
+//     props:['videoList'],
+//     template:`
+//         <div>
+//             <video-list 
+//             v-for = 'video in videoList'
+            
+//             v-bind = 'video'
+//             ></video-list>
+//         </div>
+//     `
+// })
+
+// Vue.component('video-list',{
+//     props:['poster','play','rank','title'],
+//     template:`
+//     <div class="video-item">
+//         <div class="poster">
+//             <img :src="poster" >
+//             <div class="info">
+//                 <div class="play"> {{ play }} </div>
+//                 <div class="rank"> {{ rank}} </div>
+//             </div>
+
+//         </div>
+//         <div class="title"> {{ title}} </div>
+//     </div>
+//     `
+// })
+
+
+// const vm = new Vue({
+//     el:'.box',
+//     data:{
+//         videoList:[]
+//     },
+//     created(){
+//         axios.get('https://developer.duyiedu.com/vue/bz/video' ,{
+//             params:{
+//                 start:0,
+//                 offset:20
+//             }
+//         }).then(res =>{
+//             // console.log(res)
+//             if(res.status === 200){
+//                 this.videoList = res.data.data;
+//             }
+//         })
+//     }
+// })
+
+
+
+
+
+
+// Vue.component('one-tem',{
+//     data(){
+//         return {
+//             num:0
+//         }
+//     },
+//     template:`
+//         <div>
+//             <p>全局组件</p>
+//             <span>全局</span>
+//             <button @click = "num++"> 按钮{{ num }} </button>
+//         </div>
+//         `
+// })
+
+// const vm = new Vue({
+//     el:'.box',
+//     components:{
+//         'tu-zu':{
+//             template:`
+//                 <div>
+//                     <one-tem/>
+//                     <one-tem/> 
+//                     <one-tem/>     
+//                 </div>
+//             `
+//         }
+//     }
+// })
+
+
+
+</script>
 </body>
 </html>
