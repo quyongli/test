@@ -10,130 +10,102 @@
 </head>
 <body>
 
-
-
-
-    
-<!-- <div class="box"> -->
-    <!-- <video-list 
-    v-for = 'video in videoList'
-    :img-src = 'video.poster'
-    :play = 'video.play'
-    :rank = 'video.rank'
-    :title = 'video.title'
-    ></video-list> -->
-    <!-- <video-box :video-list = 'videoList'></video-box>
-</div> -->
-
 <div class="box">
-   <!-- <video-item
-    v-for='video in videoList'
-    :poster = 'video.poster'
-    :play = 'video.play'
-    :rank = 'video.rank'
-    :title = 'video.title'
-   ></video-item> -->
 
-    <!-- <video-list :video-list = 'videoList'></video-list> -->
-<video-list
-    :video-list = 'videoList'
-></video-list>
+<!-- 父级 {{ num }}  <button @click = 'num ++'>按钮</button>
+<one-demo :num = 'num' :val = 'val'></one-demo> -->
+<tu-demo :val = 'val' a='12' b= '33' class="demo1"></tu-demo>
+<!-- <three type = 'checkbox'></three> -->
+<three type = 'text' name = 'txt'></three>
+
 </div>
-
 <script>
-
-Vue.component('video-list',{
-    props:['videoList'],
+    //非prop属性；
+ Vue.component('three',{
+     inheritAttrs:false,
+     mounted(){
+         console.log(this.$attrs)
+     },
+     template:`
+     <label for="">
+        <input v-bind = this.$attrs /> 
+        <input v-bind="$attrs" />
+    </label>
+     `
+ })   
+  
+Vue.component('tu-demo',{
+    props:['val','oneName'],
     template:`
-        <div>
-            <video-item
-                v-for="video in videoList"
-                v-bind = 'video'
-            ></video-item>
-        </div>
+        <div class= 'demo2' a = 99> {{ val }} {{ oneName }} </div>
     `
 })
 
 
-// Vue.component('video-list',{
-//     props:['videoList'],
+// Vue.component('one-demo',{
+//     props:['num','val'],
+//     data(){
+//         return {
+//             newNum :this.num
+//         }
+//     },
+//     computed:{
+//         newVal(){
+//             return this.val.trim().toLowerCase();
+//         }
+//     },
 //     template:`
-//     <div>
-//         <video-item 
-//          v-for="video in videoList"
-//          v-bind='video'
-//         />
-//     </div>
+//         <div>
+//             子集 {{ newNum }}   
+//             <button @click = 'newNum ++ '>子集按钮</button> 
+//             {{ newVal }}
+//         </div>
 //     `
 // })
-
-Vue.component('video-item',{
-    props:['poster','play','rank','title'],
-    template:`
-    <div class="video-item">
-        <div class="poster">
-            <img :src="poster" alt="">
-            <div class="info">
-                <div class="play"> {{ play }} </div>
-                <div class="rank"> {{ rank }} </div>
-                
-            </div>
-        </div>
-        <div class="title"> {{ title }} </div>
-    </div>
-    `
-})
-
 
 const vm = new Vue({
     el:'.box',
     data:{
-        videoList:[]
-    },
-    created(){
-        axios.get('https://developer.duyiedu.com/vue/bz/video',{
-            params:{
-                start:0,
-                offset:20
-            }
-        }).then(res =>{
-            if(res.status === 200){
-                this.videoList = res.data.data;
-            }
-        })
+        num:3,
+        val:'   3wew  AAHS',
+        className:'deme2'
     }
 })
 
-
-
-
-// Vue.component('video-box',{
-//     props:['videoList'],
+// Vue.component('one-demo1',{
+//     props:{
+//         val:{
+//             type:[String,Array],
+//             default:'默认值',
+//             validator(porp){ //验证器
+//                 return porp.length>0;
+//             }
+//         }
+//     },
 //     template:`
-//         <div>
-//             <video-list 
-//             v-for = 'video in videoList'
-            
-//             v-bind = 'video'
-//             ></video-list>
-//         </div>
+//     <div>
+//         <div> {{ val }}子集 </div>
+//     </div>
 //     `
 // })
 
-// Vue.component('video-list',{
-//     props:['poster','play','rank','title'],
-//     template:`
-//     <div class="video-item">
-//         <div class="poster">
-//             <img :src="poster" >
-//             <div class="info">
-//                 <div class="play"> {{ play }} </div>
-//                 <div class="rank"> {{ rank}} </div>
-//             </div>
 
+// Vue.component('one-demo1',{
+//     props:{
+//         val:{
+//             type:Number
+//         }
+//     },
+//     data(){
+//         return {
+//             newVal : this.val
+//         }
+//     },
+//     template:`
+//         <div>子集 {{ newVal }} 
+//             <button @click = 'newVal ++ '> 按钮z </button>
 //         </div>
-//         <div class="title"> {{ title}} </div>
-//     </div>
+        
 //     `
 // })
 
@@ -141,57 +113,26 @@ const vm = new Vue({
 // const vm = new Vue({
 //     el:'.box',
 //     data:{
-//         videoList:[]
+//         val:'   545  ds   A',
+//         text:[
+//             {'name':'闪闪闪'},
+//             {'name':'但是活动好的'}
+//         ]
 //     },
-//     created(){
-//         axios.get('https://developer.duyiedu.com/vue/bz/video' ,{
-//             params:{
-//                 start:0,
-//                 offset:20
-//             }
-//         }).then(res =>{
-//             // console.log(res)
-//             if(res.status === 200){
-//                 this.videoList = res.data.data;
-//             }
-//         })
-//     }
-// })
-
-
-
-
-
-
-// Vue.component('one-tem',{
-//     data(){
-//         return {
-//             num:0
-//         }
-//     },
-//     template:`
-//         <div>
-//             <p>全局组件</p>
-//             <span>全局</span>
-//             <button @click = "num++"> 按钮{{ num }} </button>
-//         </div>
-//         `
-// })
-
-// const vm = new Vue({
-//     el:'.box',
 //     components:{
-//         'tu-zu':{
+//         'demo-tem':{
+//             // props:['text'],
 //             template:`
 //                 <div>
-//                     <one-tem/>
-//                     <one-tem/> 
-//                     <one-tem/>     
+//                     <one-demo1 :val = this.val />
+                    
 //                 </div>
+               
 //             `
 //         }
 //     }
 // })
+
 
 
 
