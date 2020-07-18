@@ -10,132 +10,150 @@
 </head>
 <body>
 
-<div class="box">
+<div class="box" >
 
-<!-- 父级 {{ num }}  <button @click = 'num ++'>按钮</button>
-<one-demo :num = 'num' :val = 'val'></one-demo> -->
-<tu-demo :val = 'val' a='12' b= '33' class="demo1"></tu-demo>
-<!-- <three type = 'checkbox'></three> -->
-<three type = 'text' name = 'txt'></three>
+   
+    <!-- <div :style = '{fontSize:postFontSize + "em"}'>
+        <item
+            v-for='k in post'
+            :txt = 'k'
+            :key = 'k.id'
+            @big-size = 'postFontSize += 0.1'
+        ></item>
+    </div> -->
+   <!-- <div :style='{fontSize:postFontSize + "em"}'>
+       <item
+            v-for = 'item in post'
+            :txt = 'item'
+            :key = 'item.id'
+            @big-size = 'addNum'
+       ></item>
+   </div> -->
+
+   <!-- <div :style = '{fontSize:postFontSize + "em"}'>
+    <item-list
+        v-for='item in post'
+        :item = 'item'
+        :key = 'item.id'
+        @click.native = 'postFontSize += 0.2'
+    ></item-list> -->
+    <!-- 事件加修饰符，native  @click.native   会触发原生事件 -->
+   
+
+<!-- <box-input 
+    @focus = 'onFocus'
+    @blur = 'onBlur'
+></box-input> -->
+
+<box-input1
+    @focus = 'onFocus'
+    @blur = 'onBlur'
+></box-input1>
+
+
+</div>
 
 </div>
 <script>
-    //非prop属性；
- Vue.component('three',{
-     inheritAttrs:false,
-     mounted(){
-         console.log(this.$attrs)
-     },
-     template:`
-     <label for="">
-        <input v-bind = this.$attrs /> 
-        <input v-bind="$attrs" />
-    </label>
-     `
- })   
-  
-Vue.component('tu-demo',{
-    props:['val','oneName'],
+
+Vue.component('box-input1',{
     template:`
-        <div class= 'demo2' a = 99> {{ val }} {{ oneName }} </div>
+        <div>
+            <input type = 'text' v-on = '$listeners'/>
+        </div>
     `
 })
-
-
-// Vue.component('one-demo',{
-//     props:['num','val'],
-//     data(){
-//         return {
-//             newNum :this.num
-//         }
-//     },
-//     computed:{
-//         newVal(){
-//             return this.val.trim().toLowerCase();
-//         }
-//     },
-//     template:`
-//         <div>
-//             子集 {{ newNum }}   
-//             <button @click = 'newNum ++ '>子集按钮</button> 
-//             {{ newVal }}
-//         </div>
-//     `
-// })
 
 const vm = new Vue({
     el:'.box',
     data:{
-        num:3,
-        val:'   3wew  AAHS',
-        className:'deme2'
+        postFontSize:1,
+        post:[
+        {title:'标题1',content:'内容大是大非后',id:0},
+        {title:'标题2',content:'内容大是大非后',id:1},
+        {title:'标题3',content:'内容大是大非后',id:2}
+        ]
+    },
+    methods:{
+      onFocus(){
+          console.log('focus')
+      },
+      onBlur(){
+          console.log('blur')
+      }
+    },
+    created(){
+        
     }
 })
 
-// Vue.component('one-demo1',{
+
+// Vue.component('box-input',{
+//     mounted(){
+//         console.log(this.$listeners)
+//     },
+//     template:`
+//         <div>
+//             <input type="text" v-on ="$listeners"/>    
+//        </div>
+//     `
+// })
+
+
+// Vue.component('item-list',{
+//     props:['item'],
+//     template:`
+//         <div>
+//             <h2> {{ item.title }} </h2>    
+//             <button>按钮</button>
+//             <p> {{ item.content }} </p>
+//         </div>
+//     `
+// })
+
+
+
+
+// Vue.component('item',{
+//     props:['txt'],
+//     template:`
+//         <div>
+//             <h3> {{ txt.title }} </h3>    
+//             <button @click = '$emit("big-size",0.2)'>按钮</button>
+//             <p> {{ txt.content }} </p>
+//         </div>
+//     `
+// })
+
+// Vue.component('item',{
+//     props:['txt'],
+//     template:`
+//         <div>
+//             <h3> {{ txt.title }} </h3>    
+//             <button @click = '$emit("big-size")'>按钮</button>
+//             <p> {{ txt.content }} </p>
+//         </div>
+//     `
+// })
+
+
+// Vue.component('item-demo',{
 //     props:{
 //         val:{
-//             type:[String,Array],
-//             default:'默认值',
-//             validator(porp){ //验证器
-//                 return porp.length>0;
-//             }
+//             type:[Number,Array]
+//         },
+//         post:{
+//             type:Object
 //         }
 //     },
 //     template:`
 //     <div>
-//         <div> {{ val }}子集 </div>
+//         <h3> {{ post.title }} </h3>
+//         <button @click = '$emit("big-size")' >放大字号</button>
+//         <div> {{ post.content }} </div>
 //     </div>
 //     `
 // })
-
-
-// Vue.component('one-demo1',{
-//     props:{
-//         val:{
-//             type:Number
-//         }
-//     },
-//     data(){
-//         return {
-//             newVal : this.val
-//         }
-//     },
-//     template:`
-//         <div>子集 {{ newVal }} 
-//             <button @click = 'newVal ++ '> 按钮z </button>
-//         </div>
-        
-//     `
-// })
-
-
-// const vm = new Vue({
-//     el:'.box',
-//     data:{
-//         val:'   545  ds   A',
-//         text:[
-//             {'name':'闪闪闪'},
-//             {'name':'但是活动好的'}
-//         ]
-//     },
-//     components:{
-//         'demo-tem':{
-//             // props:['text'],
-//             template:`
-//                 <div>
-//                     <one-demo1 :val = this.val />
-                    
-//                 </div>
-               
-//             `
-//         }
-//     }
-// })
-
-
-
-
 </script>
 </body>
 </html>
