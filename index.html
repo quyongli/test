@@ -10,150 +10,433 @@
 </head>
 <body>
 
-<div class="box" >
 
-   
-    <!-- <div :style = '{fontSize:postFontSize + "em"}'>
-        <item
-            v-for='k in post'
-            :txt = 'k'
-            :key = 'k.id'
-            @big-size = 'postFontSize += 0.1'
-        ></item>
-    </div> -->
-   <!-- <div :style='{fontSize:postFontSize + "em"}'>
-       <item
-            v-for = 'item in post'
-            :txt = 'item'
-            :key = 'item.id'
-            @big-size = 'addNum'
-       ></item>
-   </div> -->
+<!-- <div class="box" :style = '{fontSize:postFontSize + "em"}'>
+    <box2
+ v-for = 'val in post'
+ :post = 'val'
+ :key = 'val.id'
+ @big-size = 'postFontSize += $event'
+></box2>
 
-   <!-- <div :style = '{fontSize:postFontSize + "em"}'>
-    <item-list
-        v-for='item in post'
-        :item = 'item'
-        :key = 'item.id'
-        @click.native = 'postFontSize += 0.2'
-    ></item-list> -->
-    <!-- 事件加修饰符，native  @click.native   会触发原生事件 -->
-   
+<box-demo 
+    type = 'text' @focus = 'focus' @blur = 'blur'
+></box-demo>
 
-<!-- <box-input 
-    @focus = 'onFocus'
-    @blur = 'onBlur'
-></box-input> -->
+</div> -->
 
-<box-input1
-    @focus = 'onFocus'
-    @blur = 'onBlur'
-></box-input1>
 
+<!-- <div class="box">
+<box-demo1
+    type = 'text' v-model='name'
+></box-demo1>
+
+<check-box
+    :checked = 'checked'
+    @change = 'checked = $event'
+></check-box>
+
+<check-box
+    v-model = 'checked'
+></check-box>
+
+<sync-box
+    :value = 'value'
+    @input:value = 'value = $event'
+></sync-box>
+
+<sync-box
+    :value.sync='name'
+></sync-box>
+<sync-box
+    v-model = 'value'
+></sync-box>
+
+
+</div> -->
+
+<!-- 插槽 -->
+<div class="box">
+
+<!-- <cmp> 模板内写了slot标签  slot在哪，此内容就出现在哪 </cmp> -->
+<!-- <cmp> {{ name }} </cmp> -->
+<!-- <button-demo> button </button-demo>   后备内容；  -->
+
+
+
+<!-- 具名插槽 -->
+<!-- <much-cmp>xingm</much-cmp> -->
+
+<!-- 具名插槽   默认插槽，可不写name ,如写，应为：v-slot:default -->
+<!-- 注意： v-slot 指令  只能写在template上 -->
+<!-- <much-cmp>
+    <template v-slot:header>      
+        <div>头部</div>
+    </template>
+    <template>  
+        <p>内容</p>
+    </template>
+    <template v-slot:footer>
+        <div>尾部footer</div>
+    </template>
+</much-cmp> -->
+<!-- 上面例子的另一种写法。当slot有值时，v-slot: 可简写成 # -->
+<!-- <much-cmp>
+    <template #header>      
+        <div>头部</div>
+    </template>
+    <template>  
+        <p>内容</p>
+    </template>
+    <template #footer>
+        <div>尾部footer</div>
+    </template>
+</much-cmp> -->
+
+
+<!-- 作用域插槽 -->
+<!-- <scope-box>
+    <template v-slot:default = 'slotProp'>
+        {{ slotProp.user.name }}
+
+    </template>
+</scope-box>
+<scope-box>
+    <template v-slot:default='friendShow'> 
+        {{ friendShow.one }}
+    </template>
+</scope-box> -->
+
+
+
+<!-- 解构插槽  修改名称 -->
+<!-- <san-box v-slot='{people}'>  
+    {{ people.name }}
+</san-box>
+<san-box v-slot='{people:newName}'>
+    {{ newName.name }}
+</san-box> -->
+
+
+<!-- 动态组件 -->
+<!-- <component is='one-a'></component>
+<component is='one-b'></component> -->
+
+
+<!-- 利用动态组件 切换元素 -->
+<button v-for='page in pages' :key = 'page.id' @click = 'cmpPage = page.cmp'> {{ page.name }} </button>
+<keep-alive>  
+    <!-- 用 keep-alive  可以把组件做一个缓存， -->
+    <component :is='cmpPage'></component>
+
+</keep-alive>
 
 </div>
 
-</div>
 <script>
 
-Vue.component('box-input1',{
+
+Vue.component('cmp-a',{
+    data(){
+        return {
+            posts:[
+                {name:'post---1',id:01,con:{template:`<div>content 内容1</div>`}},
+                {name:'post---2',id:02,con:{template:`<div>content 内容2</div>`}},
+                {name:'post--3',id:03,con:{template:`<div>content 内容3</div>`}}
+            ],
+            postCmp:undefined
+        }
+    },
+    created(){
+        this.postCmp = this.posts[0].con
+    },
     template:`
         <div>
-            <input type = 'text' v-on = '$listeners'/>
+            <button :style='{marginRight:"10px"}' 
+                v-for='post in posts'
+                :key='post.id'
+                @click = 'postCmp = post.con'
+                > 
+                {{ post.name }} 
+            </button>
+            <keep-alive>    
+            <component :is='postCmp'></component>
+            </keep-alive>
         </div>
     `
 })
 
+Vue.component('cmp-b',{
+    template:`
+        <div>b</div>
+    `
+})
+
+
 const vm = new Vue({
     el:'.box',
     data:{
-        postFontSize:1,
-        post:[
-        {title:'标题1',content:'内容大是大非后',id:0},
-        {title:'标题2',content:'内容大是大非后',id:1},
-        {title:'标题3',content:'内容大是大非后',id:2}
+        name:'jubuData',
+        cmpPage:'cmp-a',
+        pages:[
+            {name:'微博',cmp:'cmp-a',id:0},
+            {name:'简书',cmp:'cmp-b',id:1}
         ]
-    },
-    methods:{
-      onFocus(){
-          console.log('focus')
-      },
-      onBlur(){
-          console.log('blur')
-      }
-    },
-    created(){
-        
     }
 })
 
 
-// Vue.component('box-input',{
-//     mounted(){
-//         console.log(this.$listeners)
-//     },
+// 动态组件
+// Vue.component('one-a',{
 //     template:`
-//         <div>
-//             <input type="text" v-on ="$listeners"/>    
-//        </div>
+//         <div>a</div>
+//     `
+// })
+
+// Vue.component('one-b',{
+//     template:`
+//         <div>b</div>
 //     `
 // })
 
 
-// Vue.component('item-list',{
-//     props:['item'],
-//     template:`
-//         <div>
-//             <h2> {{ item.title }} </h2>    
-//             <button>按钮</button>
-//             <p> {{ item.content }} </p>
-//         </div>
-//     `
-// })
-
-
-
-
-// Vue.component('item',{
-//     props:['txt'],
-//     template:`
-//         <div>
-//             <h3> {{ txt.title }} </h3>    
-//             <button @click = '$emit("big-size",0.2)'>按钮</button>
-//             <p> {{ txt.content }} </p>
-//         </div>
-//     `
-// })
-
-// Vue.component('item',{
-//     props:['txt'],
-//     template:`
-//         <div>
-//             <h3> {{ txt.title }} </h3>    
-//             <button @click = '$emit("big-size")'>按钮</button>
-//             <p> {{ txt.content }} </p>
-//         </div>
-//     `
-// })
-
-
-// Vue.component('item-demo',{
-//     props:{
-//         val:{
-//             type:[Number,Array]
-//         },
-//         post:{
-//             type:Object
+// Vue.component('san-box',{
+//     data(){
+//         return {
+//             people:{
+//                 name:'oneName',
+//                 age:223
+//             }
 //         }
 //     },
 //     template:`
+//         <div>
+//             <slot :people='people'></slot>    
+//         </div>
+//     `
+// })
+
+
+
+// 作用域插槽
+// 只有一个插槽时，template可以省略，可直接写在模板上（v-slot = ''）；
+// Vue.component('scope-box',{
+//     data(){
+//         return {
+//             user:{
+//                 name:'haha',
+//                 age:34
+//             },
+//             friends:{
+//                 like:'likes'
+//             }
+//         }
+//     },
+//     template:`
+//         <div>
+//             <slot :user = 'user' :one='friends'></slot>    
+//         </div>
+//     `
+// })
+
+
+
+// 具名插槽
+// Vue.component('much-cmp',{
+//     template:`
 //     <div>
-//         <h3> {{ post.title }} </h3>
-//         <button @click = '$emit("big-size")' >放大字号</button>
-//         <div> {{ post.content }} </div>
+//         <header>
+//             <!-- 页头 -->
+//             <slot name = "header"></slot>
+//         </header>
+//         <main>
+//             <slot></slot>
+//             <!-- 主要内容 -->
+//         </main>
+//         <footer>
+//             <!-- 页脚 -->
+//             <slot name='footer'></slot>
+//         </footer>
 //     </div>
 //     `
 // })
+
+
+
+// 后备内容；
+// Vue.component('button-demo',{
+//     template:`
+//     <button>
+//         <slot> submit </slot>    
+//     </button>
+//     `
+// })
+
+// Vue.component('cmp',{
+//     data(){
+//         return {
+//             name:'组件name'
+//         }
+//     },
+//     template:`
+//         <div> xxxxx 
+//             {{ name }}
+//             <slot></slot>
+//         </div>
+//     `
+// })
+
+
+//  插槽
+
+// Vue.component('sync-box',{
+//     props:{
+//         value:String
+//     },
+//     template:`
+//         <input type='text' :value='value' @input='$emit("update:value",$event.target.value)'/>
+//     `
+// })
+
+
+// const vm = new Vue({
+//     el:'.box',
+//     data:{
+//         value:' ',
+//         name:'one',
+//         checked:true
+//     }
+// })
+// Vue.component('box-demo1',{
+//     //绑定特性
+//     model:{
+//         prop:'checked',
+//         event:'change'
+//     },
+//     props:{
+//         'val':String
+//     },
+//     template:`
+//         <input  :value = 'val' @input = '$emit("input",$event.target.value)' />
+//     `
+// })
+// Vue.component('check-box',{
+//     model:{
+//         prop:'checked',
+//         event:'change'
+//     },
+//     props:{
+//         checked:Boolean
+//     },
+//     template:`
+//         <input type='checkbox' :checked = 'checked' @change = '$emit("change",$event.target.checked)'/>
+//     `
+// })
+
+
+// Vue.component('box-demo',{
+//     template:`
+//         <input v-on = '$listeners' />
+//     `
+// })
+
+
+// // Vue.component('box2',{
+// //     props:['post'],
+// //     template:`
+// //     <div>
+// //         <p> {{ post.title }} </p>
+// //         <button @click = '$emit("big-size")'>按钮 </button>
+// //         <p> {{ post.content }} </p>
+// //     </div>
+// //     `
+// // })
+
+
+// Vue.component('box2',{
+//     props:['post'],
+//     template:`
+//     <div>
+//         <p> {{ post.title }} </p>
+//         <button @click = '$emit("big-size",0.2)'>按钮 </button>
+//         <p> {{ post.content }} </p>
+//     </div>
+//     `
+// })
+
+
+// const vm = new Vue({
+//     el:'.box',
+//     data:{
+//         postFontSize:1,
+//         post:[
+//         {title:'标题1',content:'内容大是大非后',id:0},
+//         {title:'标题2',content:'内容大是大非后',id:1},
+//         {title:'标题3',content:'内容大是大非后',id:2}
+//         ]
+//     },
+//     methods:{
+//         focus(){
+//             console.log('focus')
+//         },
+//         blur(){
+//             console.log('blur')
+//         }
+//     }
+    
+// })
+
+
+
+
+// Vue.component('box-input2',{
+//     props:['val'],
+//     template:`
+//         <div>
+//             <input type = 'text' :value='val' @input='$emit("input",$event.target.value)'/>    
+//         </div>
+//     `
+// })
+
+// const vm = new Vue({
+//     el:'.box',
+//     data:{
+//         name:'shsnshen',
+//         postFontSize:1,
+//         post:[
+//         {title:'标题1',content:'内容大是大非后',id:0},
+//         {title:'标题2',content:'内容大是大非后',id:1},
+//         {title:'标题3',content:'内容大是大非后',id:2}
+//         ]
+//     },
+//     methods:{
+//       addSize(){
+//         console.log('sss55')
+//           this.postFontSize += 0.2;
+//           console.log('sss')
+//       },
+//       onFocus(){
+//           console.log('focus')
+//       },
+//       onBlur(){
+//           console.log('blur')
+//       }
+//     },
+//     created(){
+        
+//     }
+// })
+
+
+// Vue.component('box-input1',{
+//     props:['value'],
+//     template:`
+//         <div>
+//             <input type = 'text' :value = 'value' @input = '$emit("input",$event.target.value)'/>
+//         </div>
+//     `
+// })
+
 </script>
 </body>
 </html>
