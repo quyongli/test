@@ -9,66 +9,8 @@
     <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-<div class="box">
 
-    <my-cmp>
-        <cmp-a>
-            <cmp-b>
-                <cmp-c></cmp-c>
-            </cmp-b>
-        </cmp-a>
-    </my-cmp>
-
-</div>
 <script>
-
-Vue.component('my-cmp',{
-    // 可以把provide看成一个大范围的prop属性；后代用inject 接收数据。缺点：不实时，非响应式，重构会困难；一般在组件库使用。（因为组件库结构改变少，几乎不改变）；
-    provide(){
-        return {
-            share:this.share
-        }
-    },
-    data(){
-        return{
-            share:'sharing...'
-        }
-    },
-    template:`
-    <div>
-        <slot></slot>    
-    </div>
-    `
-})
-Vue.component('cmp-a',{
-    mounted(){
-        console.log(this.$parent.share)
-    },
- template:`
-    <div>
-        <slot></slot>    
-    </div>
- `
-})
-Vue.component('cmp-b',{
-    //  inject 注入 注射;  接收provide 的值；
-    inject:['share'],
-    mounted(){
-    console.log(this.$parent.$parent.share);
-    console.log(this.share +'cmp-b')
-},
-    template:`<div><slot></slot></div>`
-})
-Vue.component('cmp-c',{
-   
-    template:`<div><slot></slot></div>`
-})
-const vm = new Vue({
-    el:'.box',
-    data:{
-        name:'haha'
-    }
-})
 
 </script>
 </body>
